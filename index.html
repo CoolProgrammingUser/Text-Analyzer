@@ -5,10 +5,30 @@
             Text Analyzer
         </title>
         <script>
+            var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+            var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
+            window.addEventListener("load", function() {
+                document.getElementById("analyze").addEventListener("click", function() {
+                    document.getElementById("before").style.display = "none";
+                    var textArray = document.getElementById("text").value.split("");
+                    textArray.forEach(function(character /* , index, array */ ) {
+                        document.getElementById("analysis").value += character;
+                    } /* , valueOf"this" */ );
+                    document.getElementById("after").style.display = "block";
+                });
+                document.getElementById("back").addEventListener("click", function() {
+                    document.getElementById("text").value = "";
+                    document.getElementById("after").style.display = "none";
+                    document.getElementById("before").style.display = "block";
+                });
+            });
         </script>
         <style>
             body {
                 text-align: center;
+            }
+            #after {
+                display: none;
             }
         </style>
     </head>
@@ -19,7 +39,17 @@
         <p>
             Trial number = 0
         </p>
-        <textarea>
-        </textarea>
+        <div id="before">
+            <textarea cols="60" rows="10" placeholder="Put your text here." id="text"></textarea>
+            <button type="button" id="analyze">
+                Analyze
+            </button>
+        </div>
+        <div id="after">
+            <textarea cols="60" rows="10" id="analysis"></textarea>
+            <button type="button" id="back">
+                Back
+            </button>
+        </div>
     </body>
 </html>
