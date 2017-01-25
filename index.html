@@ -7,17 +7,27 @@
         <script>
             var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
             var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
+            var usedCharacters = {};
             window.addEventListener("load", function() {
                 document.getElementById("analyze").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
                     var textArray = document.getElementById("text").value.split("");
                     textArray.forEach(function(character /* , index, array */ ) {
-                        document.getElementById("analysis").value += character;
+                        if (usedCharacters[character]) {
+                            usedCharacters[character] += 1;
+                        } else {
+                            usedCharacters[character] = 1;
+                        }
                     } /* , valueOf"this" */ );
+                    document.getElementById("analysis").value = "Occurrences:\n\n";
+                    for (var character in usedCharacters) {
+                        document.getElementById("analysis").value += character + " = " + usedCharacters[character] + "\n";
+                    }
                     document.getElementById("after").style.display = "block";
                 });
                 document.getElementById("back").addEventListener("click", function() {
                     document.getElementById("text").value = "";
+                    usedCharacters = [];
                     document.getElementById("analysis").value = "";
                     document.getElementById("after").style.display = "none";
                     document.getElementById("before").style.display = "block";
