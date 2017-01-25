@@ -11,7 +11,7 @@
             window.addEventListener("load", function() {
                 document.getElementById("analyze").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
-                    var textArray = document.getElementById("text").value.split("");
+                    var textArray = document.getElementById("text").value.split("").sort();
                     textArray.forEach(function(character /* , index, array */ ) {
                         if (usedCharacters[character]) {
                             usedCharacters[character] += 1;
