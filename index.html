@@ -13,9 +13,9 @@
             var sortType = "alphabetical";
             function display() {
                 document.getElementById("analysis").value = "Occurrences:\n\n";
-                for (var character in sortings[sortType]) {
-                    document.getElementById("analysis").value += character + " = " + sortings[sortType][character] + "\n";
-                }
+                sortings[sortType].forEach(function(frequency, character) {
+                    document.getElementById("analysis").value += character + " = " + frequency + "\n";
+                });
             }
             window.addEventListener("load", function() {
                 document.getElementById("analyze").addEventListener("click", function() {
@@ -31,49 +31,49 @@
                     sortings.alphabetical = usedCharacters;
                     var rawGroupings = [{},{},{},{},{},{},{},{}];
                     var highest = 0;
-                    for (var character in usedCharacters) {
-                        if (usedCharacters[character] > highest) {
-                            highest = usedCharacters[character];
+                    usedCharacters.forEach(function(frequency) {
+                        if (frequency > highest) {
+                            highest = frequency;
                         }
-                    }
-                    for (character in usedCharacters) {
-                        if (usedCharacters[character] > highest*7/8) {
-                            rawGroupings[0][character] = usedCharacters[character];
-                        } else if (usedCharacters[character] > highest*6/8) {
-                            rawGroupings[1][character] = usedCharacters[character];
-                        } else if (usedCharacters[character] > highest*5/8) {
-                            rawGroupings[2][character] = usedCharacters[character];
-                        } else if (usedCharacters[character] > highest*4/8) {
-                            rawGroupings[3][character] = usedCharacters[character];
-                        } else if (usedCharacters[character] > highest*3/8) {
-                            rawGroupings[4][character] = usedCharacters[character];
-                        } else if (usedCharacters[character] > highest*2/8) {
-                            rawGroupings[5][character] = usedCharacters[character];
-                        } else if (usedCharacters[character] > highest*1/8) {
-                            rawGroupings[6][character] = usedCharacters[character];
+                    });
+                    usedCharacters.forEach(function(frequency, character) {
+                        if (frequency > highest*7/8) {
+                            rawGroupings[0][character] = frequency;
+                        } else if (frequency > highest*6/8) {
+                            rawGroupings[1][character] = frequency;
+                        } else if (frequency > highest*5/8) {
+                            rawGroupings[2][character] = frequency;
+                        } else if (frequency > highest*4/8) {
+                            rawGroupings[3][character] = frequency;
+                        } else if (frequency > highest*3/8) {
+                            rawGroupings[4][character] = frequency;
+                        } else if (frequency > highest*2/8) {
+                            rawGroupings[5][character] = frequency;
+                        } else if (frequency > highest*1/8) {
+                            rawGroupings[6][character] = frequency;
                         } else {
-                            rawGroupings[7][character] = usedCharacters[character];
+                            rawGroupings[7][character] = frequency;
                         }
-                    }
+                    });
                     rawGroupings.forEach(function(group) {
                         var iterations = 0;
-                        while (Object.keys(group).length > 1 && iterations < 1000) {
+                        while (Object.keys(group).length > 0 && iterations < 1000) {
                             console.log(Object.keys(group));
                             console.log(rawGroupings);
                             console.log(iterations);
                             highest = 0;
-                            for (character in usedCharacters) {
-                                if (usedCharacters[character] > highest) {
-                                    highest = usedCharacters[character];
+                            group.forEach(function(frequency) {
+                                if (frequency > highest) {
+                                    highest = frequency;
                                 }
-                            }
-                            for (character in usedCharacters) {
+                            });
+                            group.forEach(function(frequency, character) {
                                 console.log("{0}  {1}  {2}".format(character, usedCharacters.propertyIsEnumerable(character), highest));
-                                if (usedCharacters[character] == highest) {
-                                    sortings.frequency[character] = usedCharacters[character];
-                                    delete usedCharacters[character];
+                                if (frequency == highest) {
+                                    sortings.frequency[character] = frequency;
+                                    delete group[character];
                                 }
-                            }
+                            });
                             iterations++;
                         }
                     });
