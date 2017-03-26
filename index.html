@@ -10,7 +10,7 @@
             var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
             var sortings = {"alphabetical":{}, "frequency":{}};
             var usedCharacters = {};
-            var sortType = "alphabetical";
+            var sortType = "frequency";
             function display() {
                 document.getElementById("analysis").value = "Occurrences:\n\n";
                 sortings[sortType].forEach(function(frequency, character) {
