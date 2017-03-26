@@ -56,7 +56,8 @@
                         }
                     }
                     rawGroupings.forEach(function(group) {
-                        while (Object.keys(group).length > 1) {
+                        var iterations = 0;
+                        while (Object.keys(group).length > 1 && iterations < 1000) {
                             console.log(Object.keys(group).length);
                             highest = 0;
                             for (character in usedCharacters) {
@@ -70,6 +71,7 @@
                                     delete usedCharacters[character];
                                 }
                             }
+                            iterations++;
                         }
                     });
                     display();
