@@ -8,7 +8,15 @@
         <script>
             var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
             var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
+            var sortings = {"alphabetical":{}, "frequency":{}};
             var usedCharacters = {};
+            var sortType = "alphabetical";
+            function display() {
+                document.getElementById("analysis").value = "Occurrences:\n\n";
+                for (var character in sortings[sortType]) {
+                    document.getElementById("analysis").value += character + " = " + sortings[sortType][character] + "\n";
+                }
+            }
             window.addEventListener("load", function() {
                 document.getElementById("analyze").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
@@ -20,11 +28,55 @@
                             usedCharacters[character] = 1;
                         }
                     } /* , valueOf"this" */ );
-                    document.getElementById("analysis").value = "Occurrences:\n\n";
+                    sortings.alphabetical = usedCharacters;
+                    var rawGroupings = [{},{},{},{},{},{},{},{}];
+                    var highest = 0;
                     for (var character in usedCharacters) {
-                        document.getElementById("analysis").value += character + " = " + usedCharacters[character] + "\n";
+                        if (usedCharacters[character] > highest) {
+                            highest = usedCharacters[character];
+                        }
                     }
+                    for (character in usedCharacters) {
+                        if (usedCharacters[character] > highest*7/8) {
+                            rawGroupings[0][character] = usedCharacters[character];
+                        } else if (usedCharacters[character] > highest*6/8) {
+                            rawGroupings[1][character] = usedCharacters[character];
+                        } else if (usedCharacters[character] > highest*5/8) {
+                            rawGroupings[2][character] = usedCharacters[character];
+                        } else if (usedCharacters[character] > highest*4/8) {
+                            rawGroupings[3][character] = usedCharacters[character];
+                        } else if (usedCharacters[character] > highest*3/8) {
+                            rawGroupings[4][character] = usedCharacters[character];
+                        } else if (usedCharacters[character] > highest*2/8) {
+                            rawGroupings[5][character] = usedCharacters[character];
+                        } else if (usedCharacters[character] > highest*1/8) {
+                            rawGroupings[6][character] = usedCharacters[character];
+                        } else {
+                            rawGroupings[7][character] = usedCharacters[character];
+                        }
+                    }
+                    rawGroupings.forEach(function(group) {
+                        while (Object.keys(group).length > 0) {
+                            highest = 0;
+                            for (character in usedCharacters) {
+                                if (usedCharacters[character] > highest) {
+                                    highest = usedCharacters[character];
+                                }
+                            }
+                            for (character in usedCharacters) {
+                                if (usedCharacters[character] == highest) {
+                                    sortings.frequency[character] = usedCharacters[character];
+                                    delete usedCharacters[character];
+                                }
+                            }
+                        }
+                    });
+                    display();
                     document.getElementById("after").style.display = "block";
+                });
+                document.getElementById("sort").addEventListener("click", function() {
+                    sortType = sortType=="alphabetical" ? "frequency" : "alphabetical";
+                    display();
                 });
                 document.getElementById("back").addEventListener("click", function() {
                     document.getElementById("text").value = "";
@@ -57,6 +109,9 @@
             <textarea cols="60" rows="10" id="analysis" readonly></textarea>
             <br>
             <br>
+            <button type="button" id="sort">
+                Sort differently
+            </button>
             <button type="button" id="back">
                 Back
             </button>
