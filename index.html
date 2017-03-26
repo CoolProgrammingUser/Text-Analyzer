@@ -14,7 +14,7 @@
             function display() {
                 document.getElementById("analysis").value = "Occurrences:\n\n";
                 sortings[sortType].forEach(function(frequency, character) {
-                    document.getElementById("analysis").value += character + " = " + frequency + "\n";
+                    document.getElementById("analysis").value += character + frequency + "\n";
                 });
             }
             window.addEventListener("load", function() {
@@ -22,10 +22,10 @@
                     document.getElementById("before").style.display = "none";
                     var textArray = document.getElementById("text").value.split("").sort();
                     textArray.forEach(function(character /* , index, array */ ) {
-                        if (usedCharacters[character]) {
-                            usedCharacters[character] += 1;
+                        if (usedCharacters[character+" = "]) {
+                            usedCharacters[character+" = "] += 1;
                         } else {
-                            usedCharacters[character] = 1;
+                            usedCharacters[character+" = "] = 1;
                         }
                     } /* , valueOf"this" */ );
                     sortings.alphabetical = usedCharacters;
@@ -58,9 +58,6 @@
                     rawGroupings.forEach(function(group) {
                         var iterations = 0;
                         while (Object.keys(group).length > 0 && iterations < 1000) {
-                            console.log(Object.keys(group));
-                            console.log(rawGroupings);
-                            console.log(iterations);
                             highest = 0;
                             group.forEach(function(frequency) {
                                 if (frequency > highest) {
@@ -68,7 +65,6 @@
                                 }
                             });
                             group.forEach(function(frequency, character) {
-                                console.log("{0}  {1}  {2}".format(character, usedCharacters.propertyIsEnumerable(character), highest));
                                 if (frequency == highest) {
                                     sortings.frequency[character] = frequency;
                                     delete group[character];
