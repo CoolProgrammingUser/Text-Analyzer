@@ -57,6 +57,7 @@
                     }
                     rawGroupings.forEach(function(group) {
                         while (Object.keys(group).length > 0) {
+                            console.log(Object.keys(group).length);
                             highest = 0;
                             for (character in usedCharacters) {
                                 if (usedCharacters[character] > highest) {
