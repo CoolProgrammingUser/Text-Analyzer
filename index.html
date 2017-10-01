@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html class="html-class">
     <head>
         <title>
             Text Analyzer
         </title>
-        <script src="https://epicenterprograms.github.io/standards/oldbehavior.js"></script>
+        <script src="https://epicenterprograms.github.io/standards/behavior.js"></script>
         <script>
             var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
             var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
@@ -90,6 +90,7 @@
                 });
             });
         </script>
+        <link rel="stylesheet" href="https://epicenterprograms.github.io/standards/formatting.css">
         <style>
             #after {
                 display: none;
@@ -97,27 +98,29 @@
         </style>
     </head>
     <body>
-        <p>
-            Trial number = 0
-        </p>
-        <div id="before">
-            <textarea cols="60" rows="10" placeholder="Put your text here." id="text"></textarea>
-            <br>
-            <br>
-            <button type="button" id="analyze">
-                Analyze
-            </button>
-        </div>
-        <div id="after">
-            <textarea cols="60" rows="10" id="analysis" readonly></textarea>
-            <br>
-            <br>
-            <button type="button" id="sort">
-                Sort differently
-            </button>
-            <button type="button" id="back">
-                Back
-            </button>
-        </div>
+        <h1 class="main-title">
+            Text Analyzer
+        </h1>
+        <main>
+            <div id="before">
+                <textarea cols="60" rows="10" placeholder="Put your text here." id="text"></textarea>
+                <br>
+                <br>
+                <button type="button" id="analyze">
+                    Analyze
+                </button>
+            </div>
+            <div id="after">
+                <textarea cols="60" rows="10" id="analysis" readonly></textarea>
+                <br>
+                <br>
+                <button type="button" id="sort">
+                    Sort differently
+                </button>
+                <button type="button" id="back">
+                    Back
+                </button>
+            </div>
+        </main>
     </body>
 </html>
