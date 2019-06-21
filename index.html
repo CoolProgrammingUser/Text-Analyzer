@@ -1,27 +1,31 @@
-<!DOCTYPE html>
-<html class="html-class">
+<!doctype html>
+<html>
     <head>
         <title>
             Text Analyzer
         </title>
-        <script src="https://epicenterprograms.github.io/standards/behavior.js"></script>
+        <script src="https://epicenterprograms.github.io/standards/behavior/general.js"></script>
         <script>
+            var S = Standards.general;
+            
             var ALPHABET = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
             var PUNCTUATION = [".", "?", "!", ",", "'", '"', ";", ":", "-", "(", ")"];
             var sortings = {"alphabetical":{}, "frequency":{}};
             var usedCharacters = {};
             var sortType = "frequency";
+            
             function display() {
                 document.getElementById("analysis").value = "Occurrences:\n\n";
-                sortings[sortType].forEach(function(frequency, character) {
+                S.forEach(sortings[sortType], function(frequency, character) {
                     document.getElementById("analysis").value += character + frequency + "\n";
                 });
             }
+            
             window.addEventListener("load", function() {
                 document.getElementById("analyze").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
                     var textArray = document.getElementById("text").value.split("").sort();
-                    textArray.forEach(function(character /* , index, array */ ) {
+                    S.forEach(textArray, function(character /* , index, array */ ) {
                         if (usedCharacters[character+" = "]) {
                             usedCharacters[character+" = "] += 1;
                         } else {
@@ -31,12 +35,12 @@
                     sortings.alphabetical = usedCharacters;
                     var rawGroupings = [{},{},{},{},{},{},{},{}];
                     var highest = 0;
-                    usedCharacters.forEach(function(frequency) {
+                    S.forEach(usedCharacters, function(frequency) {
                         if (frequency > highest) {
                             highest = frequency;
                         }
                     });
-                    usedCharacters.forEach(function(frequency, character) {
+                    S.forEach(usedCharacters, function(frequency, character) {
                         if (frequency > highest*7/8) {
                             rawGroupings[0][character] = frequency;
                         } else if (frequency > highest*6/8) {
@@ -55,16 +59,16 @@
                             rawGroupings[7][character] = frequency;
                         }
                     });
-                    rawGroupings.forEach(function(group) {
+                    S.forEach(rawGroupings, function(group) {
                         var iterations = 0;
                         while (Object.keys(group).length > 0 && iterations < 1000) {
                             highest = 0;
-                            group.forEach(function(frequency) {
+                            S.forEach(group, function(frequency) {
                                 if (frequency > highest) {
                                     highest = frequency;
                                 }
                             });
-                            group.forEach(function(frequency, character) {
+                            S.forEach(group, function(frequency, character) {
                                 if (frequency == highest) {
                                     sortings.frequency[character] = frequency;
                                     delete group[character];
@@ -90,7 +94,7 @@
                 });
             });
         </script>
-        <link rel="stylesheet" href="https://epicenterprograms.github.io/standards/formatting.css">
+        <link rel="stylesheet" href="https://epicenterprograms.github.io/standards/formatting/foundation.css">
         <style>
             #after {
                 display: none;
