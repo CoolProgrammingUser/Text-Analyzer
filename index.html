@@ -16,7 +16,19 @@
             
             function display() {
                 document.getElementById("analysis").value = "Occurrences:\n\n";
-                S.forEach(sortings[sortType], function(frequency, character) {
+                let displayedList = {};
+                if (document.getElementById("combineLetters").checked) {
+                    S.forEach(sortings[sortType], function(frequency, character) {
+                        if (displayedList.hasOwnProperty(character.toLowerCase())) {
+                            displayedList[character.toLowerCase()] += frequency;
+                        } else {
+                            displayedList[character.toLowerCase()] = frequency;
+                        }
+                    });
+                } else {
+                    displayedList = sortings[sortType];
+                }
+                S.forEach(displayedList, function(frequency, character) {
                     document.getElementById("analysis").value += character + frequency + "\n";
                 });
             }
@@ -25,65 +37,40 @@
                 document.getElementById("analyze").addEventListener("click", function() {
                     document.getElementById("before").style.display = "none";
                     var textArray = document.getElementById("text").value.split("").sort();
-                    S.forEach(textArray, function(character /* , index, array */ ) {
+                    // sets the alphabetical version of the result
+                    S.forEach(textArray, function(character) {
                         if (usedCharacters[character+" = "]) {
                             usedCharacters[character+" = "] += 1;
                         } else {
                             usedCharacters[character+" = "] = 1;
                         }
-                    } /* , valueOf"this" */ );
+                    });
                     sortings.alphabetical = usedCharacters;
-                    var rawGroupings = [{},{},{},{},{},{},{},{}];
-                    var highest = 0;
-                    S.forEach(usedCharacters, function(frequency) {
-                        if (frequency > highest) {
-                            highest = frequency;
-                        }
-                    });
+                    // sets the frequency-ordered version of the result
+                    let sortingArray = [];
                     S.forEach(usedCharacters, function(frequency, character) {
-                        if (frequency > highest*7/8) {
-                            rawGroupings[0][character] = frequency;
-                        } else if (frequency > highest*6/8) {
-                            rawGroupings[1][character] = frequency;
-                        } else if (frequency > highest*5/8) {
-                            rawGroupings[2][character] = frequency;
-                        } else if (frequency > highest*4/8) {
-                            rawGroupings[3][character] = frequency;
-                        } else if (frequency > highest*3/8) {
-                            rawGroupings[4][character] = frequency;
-                        } else if (frequency > highest*2/8) {
-                            rawGroupings[5][character] = frequency;
-                        } else if (frequency > highest*1/8) {
-                            rawGroupings[6][character] = frequency;
-                        } else {
-                            rawGroupings[7][character] = frequency;
-                        }
+                        sortingArray.push([character, frequency]);
                     });
-                    S.forEach(rawGroupings, function(group) {
-                        var iterations = 0;
-                        while (Object.keys(group).length > 0 && iterations < 1000) {
-                            highest = 0;
-                            S.forEach(group, function(frequency) {
-                                if (frequency > highest) {
-                                    highest = frequency;
-                                }
-                            });
-                            S.forEach(group, function(frequency, character) {
-                                if (frequency == highest) {
-                                    sortings.frequency[character] = frequency;
-                                    delete group[character];
-                                }
-                            });
-                            iterations++;
-                        }
+                    sortingArray.sort(function(pair1, pair2) {
+                        return pair2[1] - pair1[1];
                     });
+                    S.forEach(sortingArray, function(pair) {
+                        sortings.frequency[pair[0]] = pair[1];
+                    });
+                    // displays the result
                     display();
                     document.getElementById("after").style.display = "block";
                 });
+                
                 document.getElementById("sort").addEventListener("click", function() {
                     sortType = sortType=="alphabetical" ? "frequency" : "alphabetical";
                     display();
                 });
+                
+                document.getElementById("combineLetters").addEventListener("click", function() {
+                    display();
+                });
+                
                 document.getElementById("back").addEventListener("click", function() {
                     document.getElementById("text").value = "";
                     sortings = {"alphabetical":{}, "frequency":{}};
@@ -118,6 +105,8 @@
                 <textarea cols="60" rows="10" id="analysis" readonly></textarea>
                 <br>
                 <br>
+                <input type="checkbox" id="combineLetters">
+                <label for="combineLetters">Combine upper- and lowercase letters</label>
                 <button type="button" id="sort">
                     Sort differently
                 </button>
